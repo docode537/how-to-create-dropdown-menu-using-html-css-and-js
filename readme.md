@@ -32,10 +32,6 @@ Clone the repository
    git clone https://github.com/docode537/how-to-create-dropdown-menu-using-html-css-and-js.git
    ```
 ---
-## 🎥 Video Tutorial
-Watch the tutorial video: [Click Me](#).
-## Blog Post Tutorial
-🐦 blog post: [Blog Post](https://docode.co.in/post/how-to-create-dropdown-menu-using-html-css-and-js)  
 ## 📩 Connect With Me
 🌐 Website: [DoCode](https://docode.co.in/)
 📧 Email: docode537@gmail.com 
