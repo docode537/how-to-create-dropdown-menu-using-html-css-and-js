@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multilevel Dropdown Menu</title>
+    <!-- font awesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --headerHeight: 60px;
+            --headerBg: #ffb061;
+            --primary: #ff9b4e;
+            --secondary: #ff8c34;
+            --highliter: #ff6b3d;
+        }
+
+        /* global reset */
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        ul,
+        ul li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        /* header css */
+        header {
+            background-color: var(--headerBg);
+        }
+
+        header .headerWrapper {
+            height: var(--headerHeight);
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-inline: 1rem;
+        }
+
+        /* logo css */
+        header .headerWrapper a.logo {
+            width: clamp(120px, 12vw, 250px);
+            flex-shrink: 0;
+        }
+
+        header .headerWrapper a.logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* button css */
+        header .headerWrapper>button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto 0;
+            padding: 0.5rem 0.8rem;
+            border: none;
+            border-radius: 2rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 500ms ease;
+            background-color: red;
+            margin-left: auto;
+        }
+
+        header .headerWrapper>button:hover {
+            background-color: rgb(255, 58, 58);
+        }
+
+        /* navToggler css */
+        .navToggler {
+            width: 25px;
+            height: 25px;
+            flex-shrink: 0;
+            margin: auto 0;
+            display: none;
+            flex-direction: column;
+            gap: 0.2rem;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            isolation: isolate;
+        }
+
+        .navToggler span {
+            display: flex;
+            width: 100%;
+            height: 4px;
+            background-color: black;
+            transition: 300ms ease;
+        }
+
+        .navToggler.active span {
+            position: absolute;
+        }
+
+        .navToggler.active span:nth-child(1) {
+            transform: rotate(45deg);
+        }
+
+        .navToggler.active span:nth-child(2) {
+            transform: rotate(-45deg);
+        }
+
+        /* css for menu */
+        header .headerWrapper>.menu {
+            display: flex;
+            gap: 2rem;
+            margin-left: auto;
+        }
+
+        /* arros css */
+        header .headerWrapper>.menu .arrow {
+            display: none;
+        }
+
+        /* css for all a tags which are within ul.menu */
+        header .headerWrapper .menu a {
+            text-transform: capitalize;
+            transition: 300ms ease;
+            white-space: nowrap;
+        }
+
+        header .headerWrapper .menu>li>a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            isolation: isolate;
+        }
+
+        header .headerWrapper .menu>li>a::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 300ms ease;
+        }
+
+        header .headerWrapper .menu>li:hover>a::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* css for all a tags withing submenu */
+        header .headerWrapper>.menu>li>ul a {
+            display: flex;
+            padding: 0.4rem .8rem;
+            width: 100%;
+            color: white;
+        }
+
+        /* css for submenus */
+        /* submenu level-1 */
+        header .headerWrapper>.menu>li {
+            position: relative;
+            isolation: isolate;
+        }
+
+        header .headerWrapper>.menu>li>ul {
+            position: absolute;
+            top: var(--headerHeight);
+            left: 50%;
+            transform: translateX(-50%) translateY(25px);
+            background-color: var(--primary);
+            transition: 300ms ease;
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        header .headerWrapper>.menu>li:hover>ul {
+            transform: translateX(-50%) translateY(0%);
+            visibility: visible;
+            opacity: 100;
+        }
+
+        /* add styling on a tag on hover */
+        header .headerWrapper>.menu>li>ul>li:hover>a {
+            background-color: var(--highliter);
+        }
+
+        /* submenu level-2 */
+        header .headerWrapper>.menu>li>ul>li {
+            position: relative;
+            isolation: isolate;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.23);
+            display: flex;
+            align-items: center;
+        }
+
+        header .headerWrapper>.menu>li>ul>li>ul {
+            background-color: var(--secondary);
+            position: absolute;
+            top: 10%;
+            left: 100%;
+            visibility: hidden;
+            opacity: 0;
+            transition: 300ms ease;
+        }
+
+        header .headerWrapper>.menu>li>ul>li:hover>ul {
+            opacity: 1;
+            visibility: visible;
+            top: 0%;
+        }
+
+        /* add styling on a tag on hover */
+        header .headerWrapper>.menu>li>ul>li>ul>li:hover a {
+            background-color: var(--highliter);
+        }
+
+        /* media quaries */
+        @media (max-width:768px) {
+            .navToggler {
+                display: flex;
+            }
+
+            /* menu css */
+            header .headerWrapper>.menu {
+                position: absolute;
+                background-color: #dadada;
+                width: 100%;
+                max-width: 300px;
+                height: calc(100vh - var(--headerHeight));
+                top: var(--headerHeight);
+                right: 0;
+                flex-direction: column;
+                gap: 0;
+                overflow-y: auto;
+                transition: 300ms ease;
+                /* way 1 */
+                /* transform: translateX(100%); */
+                /* Way 2 */
+                clip-path: inset(0 0 0 100%);
+            }
+
+            header .headerWrapper>.menu.active {
+                /* transform: translateX(0); */
+                clip-path: inset(0 0 0 0);
+            }
+
+            /* css for a tags */
+            header .headerWrapper>.menu>li>a {
+                color: black;
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            header .headerWrapper>.menu>li {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.195);
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding: 0.4rem 0.8rem;
+            }
+
+            /* reset css for submenu level -1 */
+            header .headerWrapper>.menu>li>ul,
+            header .headerWrapper>.menu>li:hover>ul {
+                position: unset;
+                left: unset;
+                top: unset;
+                transform: unset;
+                visibility: unset;
+                opacity: unset;
+            }
+
+            /* reset css for submenu level -2 */
+            header .headerWrapper>.menu>li>ul>li>ul,
+            header .headerWrapper>.menu>li>ul>li:hover>ul {
+                position: unset;
+                left: unset;
+                top: unset;
+                transform: unset;
+                visibility: unset;
+                opacity: unset;
+            }
+
+            /* reset list elements of submenu */
+            header .headerWrapper>.menu>li>ul li {
+                border-bottom: none;
+            }
+
+            /* reset a tags before element */
+            header .headerWrapper>.menu>li>a::before {
+                display: none;
+            }
+
+            /* css for a tag */
+            header .headerWrapper>.menu>li>a:hover {
+                color: var(--highliter);
+            }
+
+            /* css for arrow */
+            header .headerWrapper>.menu>li .arrow {
+                display: flex;
+                width: 20px;
+                height: 20px;
+                justify-content: center;
+                align-items: center;
+                background-color: var(--highliter);
+                color: white;
+                border-radius: 3px;
+                cursor: pointer;
+                flex-shrink: 0;
+                margin-inline: 2px;
+                transition: 300ms ease;
+            }
+
+            header .headerWrapper>.menu>li>a {
+                padding-block: 0.5rem;
+            }
+
+            header .headerWrapper>.menu>li>.arrow {
+                margin-block: 0.5rem;
+            }
+
+            /* fix css for direct a tag */
+            header .headerWrapper>.menu>li:has(.arrow)>a,
+            header .headerWrapper>.menu>li>ul>li:has(.arrow)>a {
+                height: unset;
+                justify-content: start;
+                width: 90%;
+            }
+
+            header .headerWrapper>.menu>li>ul {
+                background-color: #d7d7d7d7;
+            }
+
+            header .headerWrapper>.menu>li>ul>li>a {
+                color: black;
+            }
+
+            header .headerWrapper>.menu>li>ul>li:hover>a {
+                color: white;
+            }
+
+            header .headerWrapper>.menu>li>ul>li {
+                flex-wrap: wrap;
+            }
+
+            header .headerWrapper>.menu>li>ul,
+            header .headerWrapper>.menu>li>ul>li>ul {
+                width: 100%;
+                max-height: 0px;
+                overflow: hidden;
+                border-bottom: none;
+                transition: max-height 300ms ease;
+            }
+
+            /* css for active tab */
+            header .headerWrapper>.menu>li.active>ul,
+            header .headerWrapper>.menu>li.active>ul>li.active>ul {
+                max-height: 1000px;
+                overflow-y: auto;
+            }
+
+            header .headerWrapper>.menu>li.active>.arrow,
+            header .headerWrapper>.menu>li.active>ul>li.active>.arrow {
+                transform: rotate(90deg);
+            }
+
+            header .headerWrapper>.menu>li.active>ul>li.active>a,
+            header .headerWrapper>.menu>li>ul>li:hover>a {
+                background-color: var(--highliter);
+                color: white;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="headerWrapper">
+            <a href="#" class="logo"><img src="./docode.png" alt="docode"></a>
+            <ul class="menu">
+                <li><a href="#">home</a></li>
+                <li>
+                    <a href="#">about us</a><span class="arrow"><i class="fas fa-angle-right"></i></span>
+                    <!-- sub menus -->
+                    <ul>
+                        <li><a href="#">our mission</a><span class="arrow"><i class="fas fa-angle-right"></i></span>
+                            <ul>
+                                <li><a href="#">company overview</a></li>
+                                <li><a href="#">meet the team</a></li>
+                                <li><a href="#">our values</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">careers</a></li>
+                        <li><a href="#">press & media</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">blog</a><span class="arrow"><i class="fas fa-angle-right"></i></span>
+                    <!-- sub menu -->
+                    <ul>
+                        <li><a href="#">web development</a><span class="arrow"><i class="fas fa-angle-right"></i></span>
+                            <ul>
+                                <li><a href="#">javascript insights</a></li>
+                                <li><a href="#">css best practices</a></li>
+                                <li><a href="#">HTML tips & trics</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">technology trends</a></li>
+                        <li><a href="#">case studies</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button>subscribe</button>
+            <div class="navToggler">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+    <script>
+        const menu = document.querySelector('.menu');
+        const menuLinks = [...menu.querySelectorAll('li')];
+        const navToggler = document.querySelector('.navToggler');
+        // js to toggle drop menu
+        menuLinks.forEach((li) => {
+            let arrow = li.querySelector('.arrow');
+            arrow && arrow.addEventListener('click', () => {
+                li.classList.toggle('active')
+            })
+        })
+
+        navToggler.addEventListener('click', () => {
+            menu.classList.toggle('active')
+            navToggler.classList.toggle('active')
+            closeAllDropDownMenu()
+        });
+
+        // function to close all the drop down menu
+        function closeAllDropDownMenu() {
+            menuLinks.forEach((li) => {
+                li.classList.remove('active')
+            })
+        }
+    </script>
+</body>
+
+</html>
