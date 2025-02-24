@@ -1,7 +1,8 @@
 # How to Create a Dropdown Menu Using HTML, CSS, and JavaScript
 
 This repository contains a step-by-step guide on creating a **responsive dropdown menu** using **HTML, CSS, and JavaScript**. The tutorial covers basic navigation menu styling, hover effects, and JavaScript for interactive dropdowns.
-
+## 🔥 Preview
+![How to Create a Dropdown Menu Using HTML, CSS, and JS](preview.gif)
 ## 🚀 Live Tutorial & Blog Post  
 
 👉 **Read the full tutorial here:**  
