@@ -9,8 +9,7 @@ This repository contains a step-by-step guide on creating a **responsive dropdow
 [How to Create a Dropdown Menu Using HTML, CSS, and JS](https://docode.co.in/post/how-to-create-dropdown-menu-using-html-css-and-js)  
 
 🎥 **Watch the YouTube tutorial (Coming Soon!)**  
-
-> The video will be added to this README once it's published. Stay tuned!  
+[Video Tutorial](https://youtu.be/UV_8kUCeFvk?si=tN4Bhy0vSxBkrIuM)   
 
 ## 📂 Project Structure  
 ```
